@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
+import CartButton from "@/components/CartButton";
 
 const navItems = [
   { title: "Главная", path: "/" },
@@ -65,25 +66,27 @@ const Navbar = () => {
               {item.title}
             </NavLink>
           ))}
+          <CartButton className="mr-2" />
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className="ml-2"
           >
             {theme === "light" ? "🌙" : "☀️"}
           </Button>
         </nav>
 
         {/* Mobile Menu Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </Button>
+        <div className="md:hidden flex items-center">
+          <CartButton variant="ghost" className="mr-2" />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Navigation */}

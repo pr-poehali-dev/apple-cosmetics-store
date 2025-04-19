@@ -2,13 +2,20 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ProductCard from "@/components/ProductCard";
 import { products, categories } from "@/types/product";
+import { useCart } from "@/context/CartContext";
+import { ShoppingBag, Check } from "lucide-react";
 
 const ProductsPage = () => {
   const [activeCategory, setActiveCategory] = useState("all");
+  const { addToCart, items } = useCart();
 
   const filteredProducts = activeCategory === "all" 
     ? products 
     : products.filter(product => product.category === activeCategory);
+
+  const isProductInCart = (productId: string) => {
+    return items.some(item => item.product.id === productId);
+  };
 
   return (
     <div className="container py-12 px-4 md:px-6">
@@ -60,7 +67,23 @@ const ProductsPage = () => {
                 </li>
               ))}
             </ul>
-            <Button size="lg">Добавить в корзину</Button>
+            <Button 
+              size="lg" 
+              onClick={() => addToCart(products[0])}
+              variant={isProductInCart(products[0].id) ? "secondary" : "default"}
+            >
+              {isProductInCart(products[0].id) ? (
+                <span className="flex items-center">
+                  <Check size={16} className="mr-2" />
+                  В корзине
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  <ShoppingBag size={16} className="mr-2" />
+                  Добавить в корзину
+                </span>
+              )}
+            </Button>
           </div>
           <div className="aspect-square bg-muted rounded-lg overflow-hidden">
             <img 
@@ -93,7 +116,23 @@ const ProductsPage = () => {
                 </li>
               ))}
             </ul>
-            <Button size="lg">Добавить в корзину</Button>
+            <Button 
+              size="lg"
+              onClick={() => addToCart(products[1])}
+              variant={isProductInCart(products[1].id) ? "secondary" : "default"}
+            >
+              {isProductInCart(products[1].id) ? (
+                <span className="flex items-center">
+                  <Check size={16} className="mr-2" />
+                  В корзине
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  <ShoppingBag size={16} className="mr-2" />
+                  Добавить в корзину
+                </span>
+              )}
+            </Button>
           </div>
         </div>
 
@@ -112,7 +151,23 @@ const ProductsPage = () => {
                 </li>
               ))}
             </ul>
-            <Button size="lg">Добавить в корзину</Button>
+            <Button 
+              size="lg"
+              onClick={() => addToCart(products[2])}
+              variant={isProductInCart(products[2].id) ? "secondary" : "default"}
+            >
+              {isProductInCart(products[2].id) ? (
+                <span className="flex items-center">
+                  <Check size={16} className="mr-2" />
+                  В корзине
+                </span>
+              ) : (
+                <span className="flex items-center">
+                  <ShoppingBag size={16} className="mr-2" />
+                  Добавить в корзину
+                </span>
+              )}
+            </Button>
           </div>
           <div className="aspect-square bg-muted rounded-lg overflow-hidden">
             <img 
