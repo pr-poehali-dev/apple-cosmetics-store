@@ -41,6 +41,9 @@ const CartWidget = () => {
     return null;
   }
 
+  // Активен ли розовый цвет для виджета (если есть товары в корзине)
+  const hasItems = totalItems > 0;
+
   return (
     <>
       {/* Полная версия корзины */}
@@ -48,10 +51,13 @@ const CartWidget = () => {
         "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 transform",
         isCartOpen && !isMinimized ? "translate-y-0" : "translate-y-full"
       )}>
-        <div className="container px-4 md:px-6 pb-4">
+        <div className="container px-4 md:px-6 pb-4 max-w-lg mx-auto">
           <div className="bg-background rounded-t-lg shadow-lg border overflow-hidden">
             {/* Заголовок */}
-            <div className="flex items-center justify-between p-4 bg-muted/50">
+            <div className={cn(
+              "flex items-center justify-between p-4",
+              hasItems ? "bg-cosmetic-accent/20" : "bg-muted/50"
+            )}>
               <div className="flex items-center space-x-2">
                 <ShoppingBag size={20} />
                 <h3 className="text-lg font-medium">Корзина</h3>
@@ -147,7 +153,7 @@ const CartWidget = () => {
             {items.length > 0 && (
               <>
                 <Separator />
-                <div className="p-4 bg-muted/20">
+                <div className="p-4 bg-cosmetic-accent/10">
                   <div className="flex justify-between items-center mb-4">
                     <span className="font-medium">Итого:</span>
                     <span className="font-medium text-lg">
@@ -166,16 +172,21 @@ const CartWidget = () => {
       <div 
         className={cn(
           "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300",
-          "shadow-lg rounded-full bg-background border flex items-center",
+          "shadow-lg rounded-full flex items-center",
           "cursor-pointer hover:shadow-xl",
+          hasItems ? "bg-cosmetic-accent/20 hover:bg-cosmetic-accent/30" : "bg-background",
+          "border",
           isMinimized && isCartOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
         )}
         onClick={handleMinimize}
       >
-        <div className="px-4 py-2 flex items-center space-x-2">
+        <div className="px-4 py-2 sm:px-5 sm:py-3 flex items-center space-x-2">
           <ShoppingBag size={20} />
-          <span className="font-medium">{totalItems} товаров</span>
-          <span className="font-medium">{totalPrice.toLocaleString('ru-RU')} ₽</span>
+          {hasItems && (
+            <span className="font-medium whitespace-nowrap">
+              {totalPrice.toLocaleString('ru-RU')} ₽
+            </span>
+          )}
           <ChevronUp size={18} className="ml-1" />
         </div>
       </div>
