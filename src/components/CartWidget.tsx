@@ -19,9 +19,8 @@ const CartWidget = () => {
   } = useCart();
   
   const [isVisible, setIsVisible] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
 
-  // Анимация появления и исчезновения
+  // Анимация появления и исчезновения полной версии корзины
   useEffect(() => {
     if (isCartOpen) {
       setIsVisible(true);
@@ -33,14 +32,6 @@ const CartWidget = () => {
     }
   }, [isCartOpen]);
 
-  const handleMinimize = () => {
-    setIsMinimized(!isMinimized);
-  };
-
-  if (!isVisible && totalItems === 0) {
-    return null;
-  }
-
   // Активен ли розовый цвет для виджета (если есть товары в корзине)
   const hasItems = totalItems > 0;
 
@@ -49,7 +40,7 @@ const CartWidget = () => {
       {/* Полная версия корзины */}
       <div className={cn(
         "fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 transform",
-        isCartOpen && !isMinimized ? "translate-y-0" : "translate-y-full"
+        isCartOpen ? "translate-y-0" : "translate-y-full"
       )}>
         <div className="container px-4 md:px-6 pb-4 max-w-lg mx-auto">
           <div className="bg-background rounded-t-lg shadow-lg border overflow-hidden">
@@ -74,14 +65,6 @@ const CartWidget = () => {
                     Очистить
                   </Button>
                 )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleMinimize}
-                  title="Свернуть"
-                >
-                  <ChevronDown size={18} />
-                </Button>
                 <Button 
                   variant="ghost" 
                   size="icon" 
@@ -168,17 +151,17 @@ const CartWidget = () => {
         </div>
       </div>
 
-      {/* Компактная версия корзины (индикатор) */}
+      {/* Компактная версия корзины (всегда видимая) */}
       <div 
         className={cn(
-          "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300",
+          "fixed bottom-6 left-1/2 -translate-x-1/2 z-50",
           "shadow-lg rounded-full flex items-center",
-          "cursor-pointer hover:shadow-xl",
+          "cursor-pointer hover:shadow-xl transition-all duration-300",
           hasItems ? "bg-cosmetic-accent/20 hover:bg-cosmetic-accent/30" : "bg-background",
           "border",
-          isMinimized && isCartOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+          isCartOpen ? "mb-4 opacity-70 hover:opacity-100" : "mb-0"
         )}
-        onClick={handleMinimize}
+        onClick={() => setIsCartOpen(!isCartOpen)}
       >
         <div className="px-4 py-2 sm:px-5 sm:py-3 flex items-center space-x-2">
           <ShoppingBag size={20} />
@@ -187,7 +170,11 @@ const CartWidget = () => {
               {totalPrice.toLocaleString('ru-RU')} ₽
             </span>
           )}
-          <ChevronUp size={18} className="ml-1" />
+          {isCartOpen ? (
+            <ChevronDown size={18} className="ml-1" />
+          ) : (
+            <ChevronUp size={18} className="ml-1" />
+          )}
         </div>
       </div>
     </>
